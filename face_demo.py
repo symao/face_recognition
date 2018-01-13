@@ -35,7 +35,7 @@ def demo_keypoint(img_file = 'data/got0.jpg'):
     cv2.imshow('keypoints result',img)
     cv2.waitKey()
 
-def demo_recognition(img_file = 'data/got0.jpg', dataset=['data/JohnSnow.jpg','data/DaenerysTargaryen.jpg']):
+def demo_recognition(img_file = 'data/got0.jpg', dataset=['data/JohnSnow.jpg','data/DaenerysTargaryen.jpg', 'data/symao.jpg']):
     # load face image in dataset and encode
     face_list = [face_recognition.face_encodings(cv2.imread(x))[0] for x in dataset]
     name_list = [os.path.splitext(os.path.basename(x))[0] for x in dataset]
@@ -58,14 +58,42 @@ def demo_recognition(img_file = 'data/got0.jpg', dataset=['data/JohnSnow.jpg','d
     cv2.imshow('recognition result', img)
     cv2.waitKey()
 
+def demo_recognition_live(dataset=['data/JohnSnow.jpg','data/DaenerysTargaryen.jpg','data/symao.jpg']):
+    # load face image in dataset and encode
+    face_list = [face_recognition.face_encodings(cv2.imread(x))[0] for x in dataset]
+    name_list = [os.path.splitext(os.path.basename(x))[0] for x in dataset]
+    cap = cv2.VideoCapture(0)
+
+    if cap.isOpened():
+        ret,img = cap.read()
+        while ret:
+            small_img = cv2.resize(img, None, fx=0.5,fy=0.5)
+            face_locations = face_recognition.face_locations(small_img, model="cnn")
+            face_encodings = face_recognition.face_encodings(small_img, face_locations)
+            face_names = []
+            for en in face_encodings:
+                    match = face_recognition.compare_faces(face_list, en)
+                    name = 'Unknown' if True not in match else name_list[match.index(True)]
+                    face_names.append(name)
+            for (top, right, bottom, left), name in zip(face_locations, face_names):
+                cv2.rectangle(img, (left*2, top*2), (right*2, bottom*2), (55,255,155), 2)
+                cv2.putText(img, name, (left*2, top*2 - 6), cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 0, 255), 1)
+            cv2.imshow('recognition result', img)
+            key = cv2.waitKey(10)
+            if key == 27:
+                break
+            ret,img = cap.read()
+
 if __name__ == '__main__':
-    demo_detection()
-    demo_keypoint()
-    demo_recognition()
-    
+    # demo_detection()
+    # demo_keypoint()
+    # demo_recognition()
+    demo_recognition_live()
+
     # for f in ['data/got0.jpg','data/got2.jpg','data/got1.jpg']:
     #     demo_recognition(f)
 
     # for i in os.listdir('data'):
     #     demo_detection(os.path.join('data',i))
+    
     
