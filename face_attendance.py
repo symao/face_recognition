@@ -38,13 +38,16 @@ def load_faces(loaddir):
 # recognize faces
 def face_recog(img, face_list, name_list):
     k=0.5
-    small_img = cv2.resize(img, None, fx=0.5,fy=0.5)
-    face_locations = face_recognition.face_locations(small_img, model="cnn")
+    small_img = cv2.resize(img, None, fx=k,fy=k)
+    face_locations = face_recognition.face_locations(small_img)
     face_encodings = face_recognition.face_encodings(small_img, face_locations)
     face_names = []
     for en in face_encodings:
-        match = face_recognition.compare_faces(face_list, en)
-        name = 'Unknown' if True not in match else name_list[match.index(True)]
+        # match = face_recognition.compare_faces(face_list, en)
+        face_dist = face_recognition.face_distance(face_list, en)
+        min_dist = np.min(face_dist)
+        min_idx = np.argmin(face_dist)
+        name = 'Unknown' if min_dist>0.6 not in match else name_list[min_idx]
         face_names.append(name)
     return [[int(i/k) for i in x] for x in face_locations], face_names
 

@@ -85,10 +85,10 @@ def demo_recognition_live(dataset=['data/JohnSnow.jpg','data/DaenerysTargaryen.j
             ret,img = cap.read()
 
 if __name__ == '__main__':
-    # demo_detection()
-    # demo_keypoint()
-    # demo_recognition()
-    demo_recognition_live()
+    demo_detection()
+    demo_keypoint()
+    demo_recognition()
+    # demo_recognition_live()
 
     # for f in ['data/got0.jpg','data/got2.jpg','data/got1.jpg']:
     #     demo_recognition(f)
