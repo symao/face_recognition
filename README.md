@@ -24,5 +24,8 @@ pip3 install face_recognition
 
 使用
 ---
+1. API调用样例
 见代码face_demo.py, so easy.
 Python API见https://face-recognition.readthedocs.io/en/latest/readme.html
+2. 人脸考勤机demo
+见face_attendance.py, 基于pyqt5做的UI.
