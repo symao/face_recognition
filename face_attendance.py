@@ -32,7 +32,7 @@ def load_faces(loaddir):
             face_list.append(encodes[0])
             name_list.append(name)
         else:
-            print('Warning: No face in %s',f)
+            print('Warning: No face in %s'%f)
     return fimg_list,face_list,name_list
 
 # recognize faces
@@ -47,7 +47,7 @@ def face_recog(img, face_list, name_list):
         face_dist = face_recognition.face_distance(face_list, en)
         min_dist = np.min(face_dist)
         min_idx = np.argmin(face_dist)
-        name = 'Unknown' if min_dist>0.6 not in match else name_list[min_idx]
+        name = 'Unknown' if min_dist>0.6 else name_list[min_idx]
         face_names.append(name)
     return [[int(i/k) for i in x] for x in face_locations], face_names
 
